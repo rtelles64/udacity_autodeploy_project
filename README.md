@@ -209,3 +209,7 @@ Throughout this project, screenshots or URLs will be needed for the evaluation p
 ### 1. Build Phase
 
 The goal of the build phase is to compile or *lint* the source code to check for syntax errors or unintentional typos in code. It's the first line of defense against bugs as you attempt to integrate the pieces of your project together. This is especially important to *UdaPeople* because we don't want to waste credits or time running other steps if the code can't even compile.
+
+### 2. Test Phase
+
+Unit tests are one of the many very important building blocks of a system that enables Continuous Delivery. *UdaPeople* believes that tests should come first just like they do in the scientific method. If a test fails, it's because the code is no longer trustworthy. Only trustworthy code should get a ticket to continue the ride!

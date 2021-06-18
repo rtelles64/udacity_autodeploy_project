@@ -133,7 +133,7 @@ jobs:
           name: Run audit - frontend
           command: |
             cd frontend
-            npm update
+            # npm update
             npm audit fix --audit-level=critical --force
 
   scan-backend:
@@ -152,7 +152,7 @@ jobs:
           name: Run audit - backend
           command: |
             cd backend
-            npm update
+            # npm update
             npm audit fix --audit-level=critical --force
 #
 #   deploy-infrastructure:

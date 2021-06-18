@@ -55,7 +55,9 @@ jobs:
               - frontend/node_modules
               - frontend/dist
           key: frontend-build-${CIRCLE_WORKFLOW_ID}
-
+  # Section 2 - Build Phase forum here:
+  #     https://knowledge.udacity.com/questions/419574
+  #     https://github.com/jmcgui05/cicd/blob/master/.circleci/config.yml#L70
   build-backend:
     docker:
       - image: circleci/node:13.8.0

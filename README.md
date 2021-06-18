@@ -205,3 +205,7 @@ Circle CI is a SaaS and has a [free account](https://circleci.com/signup/?source
 ### Screenshots and URLs
 
 Throughout this project, screenshots or URLs will be needed for the evaluation process.
+
+### 1. Build Phase
+
+The goal of the build phase is to compile or *lint* the source code to check for syntax errors or unintentional typos in code. It's the first line of defense against bugs as you attempt to integrate the pieces of your project together. This is especially important to *UdaPeople* because we don't want to waste credits or time running other steps if the code can't even compile.

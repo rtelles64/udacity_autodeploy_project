@@ -90,7 +90,8 @@ jobs:
       - checkout
       # Restore from cache
       - restore_cache:
-          keys: frontend-build-${CIRCLE_WORKFLOW_ID}
+          keys:
+              - frontend-build-${CIRCLE_WORKFLOW_ID}
       # Your job code here
       - name: Test front end
         command: |
@@ -106,7 +107,8 @@ jobs:
       - checkout
       # Restore from cache
       - restore_cache:
-          keys: backend-build-${CIRCLE_WORKFLOW_ID}
+          keys:
+              - backend-build-${CIRCLE_WORKFLOW_ID}
       # Your job code here
       - run:
           name: Test back end

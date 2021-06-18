@@ -93,10 +93,11 @@ jobs:
           keys:
               - frontend-build-${CIRCLE_WORKFLOW_ID}
       # Your job code here
-      - name: Test front end
-        command: |
-          cd frontend
-          npm run test
+      - run:
+          name: Test front end
+          command: |
+            cd frontend
+            npm run test
 
   test-backend:
     docker:

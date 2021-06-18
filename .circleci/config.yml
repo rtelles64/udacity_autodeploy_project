@@ -116,22 +116,44 @@ jobs:
           command: |
             cd backend
             npm run test
-#
-#   scan-frontend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
-#
-#   scan-backend:
-#     docker:
-#       # Docker image here
-#     steps:
-#       # Checkout code from git
-#       # Restore from cache
-#       # Your job code here
+
+  scan-frontend:
+    docker:
+      # Docker image here
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          keys:
+              - frontend-build-${CIRCLE_WORKFLOW_ID}
+      # Your job code here
+      - run:
+          name: Run audit - frontend
+          command: |
+            cd frontend
+            npm update
+            npm audit fix --audit-level=critical --force
+
+  scan-backend:
+    docker:
+      # Docker image here
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      # Restore from cache
+      - restore_cache:
+          keys:
+              - backend-build-${CIRCLE_WORKFLOW_ID}
+      # Your job code here
+      - run:
+          name: Run audit - backend
+          command: |
+            cd backend
+            npm update
+            npm audit fix --audit-level=critical --force
 #
 #   deploy-infrastructure:
 #     docker:

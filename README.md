@@ -217,3 +217,104 @@ Unit tests are one of the many very important building blocks of a system that e
 ### 3. Analyze Phase
 
 *UdaPeople* handles some private information like social security numbers, salary amount, etc. It would be a shame if a package with a known vulnerability left a security hole in our application, giving hackers access to that information! That's why we should include a job that checks for known vulnerabilities every time we check in new code.
+
+### 4. Alerts
+
+When a build fails for any reason, the *UdaPeople* dev team needs to know about it. That way they can jump in and save the day.
+
+## Configuration Management
+
+In this section, we practice creating and configuring infrastructure before deploying code to it. We accomplish this by preparing our AWS and CircleCI accounts just a bit, then by building Ansible Playbooks for use in our CircleCI configuration.
+
+### Setup
+
+**AWS**
+
+1. Create a [new key pair](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/ec2-key-pairs.html#having-ec2-create-your-key-pair) for CircleCI to use to work with AWS resources.
+
+2. Create an [IAM user with *programmatic access*](https://serverless-stack.com/chapters/create-an-iam-user.html) and copy the id and access keys (these credentials will be needed for CircleCI to run AWS CLI commands).
+
+3. Add a [PostgreSQL database in RDS](https://aws.amazon.com/getting-started/tutorials/create-connect-postgresql-db/) that has *public accessibility*.
+
+  - Take note of connection details (*hostname* - aka endpoint, username, password)
+
+  - As long as *public accessibility* is marked as *yes*, you won't need to worry about VPC settings or security groups
+
+For this version, the postgres credentials are:
+
+  - db instance &mdash; udapeople-prod
+  - username &mdash; postgres
+  - password &mdash; udapeople123
+  - db port &mdash; 5432 (default for any postgres database)
+
+### CloudFront Distribution Primer
+
+At the very end of the pipeline, you'll need to make a switch from the old infrastructure to the new (Blue Green Deployment strategy). We will use CloudFormation and CloudFront to accomplish this. For this to work, a few things are done manually:
+
+  1. Create a random string (e.g. `kk1j287dhjppmz437`) for use in the next steps
+
+  2. Create an S3 bucket with a name that combines "udapeople" and the random string (e.g. `udapeople-kk1j287dhjppmz437`)
+
+    - If S3 complains that the name is already taken, just choose another random string
+
+    - The random string is to distinguish your bucket from other buckets
+
+  3. Run the provided [Cloud Formation](https://github.com/udacity/cdond-c3-projectstarter/blob/master/.circleci/files/cloudfront.yml) template locally (for the Workflow ID parameter, use your random string)
+
+The method below was used to generate a random string:
+
+```python
+>>> import random
+>>> import string
+>>>
+>>> random_string = ''
+>>> for i in range(2):
+...     random_string += ''.join(random.choice(letters) for j in range(5))
+...     random_string += ''.join(random.choice(digits) for j in range(3))
+```
+
+For this version, `qyznd553hoiiu818` will be the random string.
+
+Use this command to run the Cloud Formation template:
+
+```shell
+aws cloudformation create-stack --stack-name udapeople-stack --template-body file://.circleci/files/cloudfront.yml --parameters ParameterKey=WorkflowID,ParameterValue=qyznd553hoiiu818 --profile udacity-devops-default
+```
+
+Once this is done, subsequent executions of that template will modify the same CloudFront distribution to make the blue-to-green switch without fail.
+
+### Circle CI
+
+1. Add SSH key pairs from EC2 as shows [here](https://circleci.com/docs/2.0/add-ssh-key/).
+
+  - To get the actual key pair, you'll need to open the pem file in a text editor and copy the contents, then paste them into Circle CI (you can use `cat path/to/pem-file.pem` to just print the contents)
+
+2. Add the following environment variables to your Circle CI project by navigating to `{project name}` > Settings > Environment Variables, as shown [here](https://circleci.com/docs/2.0/settings/):
+
+  - `AWS_ACCESS_KEY_ID` &mdash; from IAM user CSV file
+
+  - `AWS_SECRET_ACCESS_KEY` &mdash; from IAM user CSV file
+
+  - `AWS_DEFAULT_REGION` &mdash; your default AWS region
+
+  - `TYPEORM_CONNECTION` &mdash; `postgres`
+
+  - `TYPEORM_MIGRATIONS_DIR` &mdash; `./src/migrations`
+
+  - `TYPEORM_ENTITIES` &mdash; `./src/modules/domain/**/*.entity.ts`
+
+  - `TYPEORM_MIGRATIONS` &mdash; `./src/migrations/*.ts`
+
+  - `TYPEORM_HOST` &mdash; the postgres database hostname in RDS
+
+  - `TYPEORM_PORT` &mdash; `5432` (or RDS port if it's different)
+
+  - `TYPEORM_USERNAME` &mdash; your postgres database username in RDS
+
+  - `TYPEORM_PASSWORD` &mdash; your postgres database password in RDS
+
+  - `TYPEORM_DATABASE` &mdash; your postgres database name in RDS
+
+> **NOTE**
+>
+> Some AWS-related jobs may take a while to complete. If a job takes too long, it could cause a timeout. If this is the case, just restart the job and keep your fingers crossed for faster network traffic. If this happens often, you might consider [increasing the job timeout](https://support.circleci.com/hc/en-us/articles/360007188574-Build-has-hit-timeout-limit).

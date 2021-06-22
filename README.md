@@ -320,3 +320,7 @@ Once this is done, subsequent executions of that template will modify the same C
 > Some AWS-related jobs may take a while to complete. If a job takes too long, it could cause a timeout. If this is the case, just restart the job and keep your fingers crossed for faster network traffic. If this happens often, you might consider [increasing the job timeout](https://support.circleci.com/hc/en-us/articles/360007188574-Build-has-hit-timeout-limit).
 
 ### 1. Infrastructure Phrase
+
+Setting up servers and infrastructure involves many moving parts and points of failure. UdaPeople has adopted the IaC philosophy so that the team never has to worry about a missed deployment checklist item.
+
+In this phase, we add Circle CI jobs that execute Cloud Formation templates that create infrastructure as well as jobs that execute Ansible Playbooks to configure that newly created infrastructure.

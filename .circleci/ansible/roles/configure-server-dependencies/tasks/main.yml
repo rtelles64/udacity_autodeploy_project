@@ -1,8 +1,15 @@
-- name: "install node 12.x"
-  shell: |
-    curl -sL https://deb.nodesource.com/setup_12.x | sudo -E bash -
-    sudo apt -y upgrade
-    sudo apt install -y nodejs
+---
+- name: "upgrade packages"
+  become: yes
+  apt:
+      upgrade: yes
+
+- name: "install dependencies"
+  become: yes
+  apt:
+      name: ["nodejs", "npm"]
+      state: latest
+      update_cache: yes
 
 - name: "install pm2"
   become: true
@@ -11,22 +18,3 @@
       global: yes
       production: yes
       state: present
-
-- name: "compress files for transfer"
-  shell: |
-    tar cvzf backend.tgz backend/
-
-- name: "copy files from CircleCI to server"
-  unarchive:
-      src: /root/project/backend.tgz
-      dest: /home/ubuntu/
-
-- name: "untar files"
-  shell: |
-    cd /home/ubuntu/
-    tar -xvzf backend.tgz
-
-- name: "install package dependencies"
-  shell: |
-    cd /home/ubuntu/backend/
-    npm install

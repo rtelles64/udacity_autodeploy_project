@@ -224,8 +224,8 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["1a:c3:53:27:fc:08:1d:b5:c8:92:e0:ac:be:33:64:80"]
       # attach workspace
-      - attach_workspace:
-          at: ~/
+      # - attach_workspace:
+      #     at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -233,8 +233,8 @@ jobs:
             apk add --no-cache curl
             apk add --no-cache --upgrade bash
             apk add --no-cache --update ansible
-            apk add --no-cache openssh-client
-            apk add openssh-client
+            pip3 install awscli
+            aws --version
       - run:
           name: Configure server
           command: |

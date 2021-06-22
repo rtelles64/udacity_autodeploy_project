@@ -14,7 +14,7 @@
 
 - name: "compress files for transfer"
   shell: |
-    tar -czf backend.tgz backend
+    tar -czf /root/project/backend.tgz /root/project/backend
 
 - name: "copy files from CircleCI to server"
   copy:
@@ -23,7 +23,7 @@
 
 - name: "untar files"
   shell: |
-    cd /home/ubuntu
+    cd /home/ubuntu/
     tar -xvzf backend.tgz
 
 - name: "install package dependencies"

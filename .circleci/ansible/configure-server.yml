@@ -24,9 +24,10 @@
       wait_for:
           timeout: 60
 
+    # Install python if needed
     - name: "install python for Ansible."
       # Your code here
       exit 1
   roles:
     # Your code here
-    - configure_server_dependencies
+    - configure-server-dependencies

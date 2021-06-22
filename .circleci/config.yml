@@ -173,7 +173,7 @@ jobs:
               --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID} \
               # --parameter-overrides ID="your workflow id"
               --parameter-overrides ID=${CIRCLE_WORKFLOW_ID}
-              exit 1
+
       - run:
           name: Ensure front-end infrastructure exist
           command: |
@@ -185,7 +185,7 @@ jobs:
               --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID} \
               # --parameter-overrides ID="your workflow id"
               --parameter-overrides ID=${CIRCLE_WORKFLOW_ID}
-              exit 1
+
       - run:
           name: Add back-end ip to ansible inventory
           command: |
@@ -204,11 +204,11 @@ jobs:
 
             cd .circleci/ansible/
             aws ec2 describe-instances \
-            --filteres 'Name=tag:Name,Values=backend-*' \
+            --filters 'Name=tag:Name,Values=backend-*' \
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --region us-west-1 \
             --output text >> inventory.txt
-            exit 1
+
       - persist_to_workspace:
           root: ~/
           paths:
@@ -362,9 +362,9 @@ workflows:
           requires: [build-frontend]
       - deploy-infrastructure:
           requires: [test-frontend, test-backend, scan-frontend, scan-backend]
-          filters:
-            branches:
-              only: [test-feature-branch]
+          # filters:
+          #   branches:
+          #     only: [test-feature-branch]
       # - configure-infrastructure:
       #     requires: [deploy-infrastructure]
       # - run-migrations:

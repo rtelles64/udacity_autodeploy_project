@@ -324,3 +324,5 @@ Once this is done, subsequent executions of that template will modify the same C
 Setting up servers and infrastructure involves many moving parts and points of failure. UdaPeople has adopted the IaC philosophy so that the team never has to worry about a missed deployment checklist item.
 
 In this phase, we add Circle CI jobs that execute Cloud Formation templates that create infrastructure as well as jobs that execute Ansible Playbooks to configure that newly created infrastructure.
+
+### 2. Deploy Phase

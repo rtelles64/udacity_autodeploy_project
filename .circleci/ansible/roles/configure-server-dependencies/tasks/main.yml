@@ -12,10 +12,19 @@
       production: yes
       state: present
 
+- name: "compress files for transfer"
+  shell: |
+    tar -czf backend.tgz backend
+
 - name: "copy files from CircleCI to server"
   copy:
-      src: /root/project/backend
-      dest: /home/ubuntu
+      src: /root/project/backend.tgz
+      dest: /home/ubuntu/
+
+- name: "untar files"
+  shell: |
+    cd /home/ubuntu
+    tar -xvzf backend.tgz
 
 - name: "install package dependencies"
   shell: |

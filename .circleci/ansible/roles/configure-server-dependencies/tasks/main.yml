@@ -14,10 +14,10 @@
 
 - name: "compress files for transfer"
   shell: |
-    tar -czf /root/project/backend.tgz /root/project/backend/
+    tar cvzf backend.tgz backend/
 
 - name: "copy files from CircleCI to server"
-  copy:
+  unarchive:
       src: /root/project/backend.tgz
       dest: /home/ubuntu/
 

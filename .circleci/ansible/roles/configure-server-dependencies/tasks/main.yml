@@ -14,7 +14,7 @@
 
 - name: "compress files for transfer"
   shell: |
-    tar -czf /root/project/backend.tgz /root/project/backend
+    tar -czf /root/project/backend.tgz /root/project/backend/
 
 - name: "copy files from CircleCI to server"
   copy:
@@ -28,5 +28,5 @@
 
 - name: "install package dependencies"
   shell: |
-    cd /home/ubuntu/backend
+    cd /home/ubuntu/backend/
     npm install

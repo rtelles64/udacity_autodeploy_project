@@ -222,18 +222,28 @@ jobs:
       - checkout
       # Add ssh keys with fingerprint
       - add_ssh_keys:
-          fingerprints: []
+          fingerprints: ["1a:c3:53:27:fc:08:1d:b5:c8:92:e0:ac:be:33:64:80"]
       # attach workspace
       - run:
           name: Install dependencies
           command: |
             # Your code here
-            exit 1
+            apk add --no-cache curl
+            apk add --no-cache --upgrade bash
+            apk add --no-cache --update ansible
+            apk add --no-cache openssh-client
       - run:
           name: Configure server
           command: |
             # Your code here
-            exit 1
+            INSTANCE_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/instance_ip)
+            echo ${INSTANCE_IP}
+            cd .circleci/ansible/
+            ls
+            echo ${INSTANCE_IP} >> ./inventory.txt
+            cat ./inventory.txt
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i ./inventory.txt configure-server.yml
       # Here's where you will add some code to rollback on failure
 #
 #   run-migrations:

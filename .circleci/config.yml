@@ -116,7 +116,7 @@ jobs:
           command: |
             cd backend
             npm run test
-
+  # Accidentally jumped ahead and missed error :/
   scan-frontend:
     docker:
       # Docker image here
@@ -133,7 +133,7 @@ jobs:
           name: Run audit - frontend
           command: |
             cd frontend
-            # npm update
+            npm update
             npm audit fix --audit-level=critical --force
 
   scan-backend:
@@ -152,42 +152,68 @@ jobs:
           name: Run audit - backend
           command: |
             cd backend
-            # npm update
+            npm update
             npm audit fix --audit-level=critical --force
-#
-#   deploy-infrastructure:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Ensure back-end infrastructure exists
-#           command: |
-#             aws cloudformation deploy \
-#               --template-file .circleci/files/backend.yml \
-#               #--tags project=your-tag \
-#               # --stack-name "your back-end stack name with workflow id" \
-#               # --parameter-overrides ID="your workflow id"
-#               exit 1
-#       - run:
-#           name: Ensure front-end infrastructure exist
-#           command: |
-#             aws cloudformation deploy \
-#               --template-file .circleci/files/frontend.yml \
-#               #--tags project=your-tag \
-#               # --stack-name "your front-end stack name with workflow id" \
-#               # --parameter-overrides ID="your workflow id"
-#               exit 1
-#       - run:
-#           name: Add back-end ip to ansible inventory
-#           command: |
-#             # Your code here
-#             exit 1
-#       - persist_to_workspace:
-#           root: ~/
-#           paths:
-#             - project/.circleci/ansible/inventory.txt
-#       # Here's where you will add some code to rollback on failure
+
+  deploy-infrastructure:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Ensure back-end infrastructure exists
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/backend.yml \
+              # --tags project=your-tag \
+              --tags StackName=udapeople-backend-${CIRCLE_WORKFLOW_ID} \
+              # --stack-name "your back-end stack name with workflow id" \
+              --stack-name udapeople-backend-${CIRCLE_WORKFLOW_ID} \
+              # --parameter-overrides ID="your workflow id"
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID}
+              exit 1
+      - run:
+          name: Ensure front-end infrastructure exist
+          command: |
+            aws cloudformation deploy \
+              --template-file .circleci/files/frontend.yml \
+              #--tags project=your-tag \
+              --tags StackName=udapeople-frontend-${CIRCLE_WORKFLOW_ID}
+              # --stack-name "your front-end stack name with workflow id" \
+              --stack-name udapeople-frontend-${CIRCLE_WORKFLOW_ID} \
+              # --parameter-overrides ID="your workflow id"
+              --parameter-overrides ID=${CIRCLE_WORKFLOW_ID}
+              exit 1
+      - run:
+          name: Add back-end ip to ansible inventory
+          command: |
+            # Your code here
+            INSTANCE_IP=$(aws ec2 describe-instances \
+            --filters 'Name=tag:Name,Values=backend-*' \
+            --query "Reservations[*].Instances[*].PublicIpAddress" \
+            --output text)
+
+            echo ${INSTANCE_IP}
+            curl -H "Content-Type: text/plain" \
+              -H "token: ${CIRCLE_WORKFLOW_ID}" \
+              --request PUT \
+              --data ${INSTANCE_IP} \
+              https://api.memstash.io/values/instance_ip
+
+            cd .circleci/ansible/
+            aws ec2 describe-instances \
+            --filteres 'Name=tag:Name,Values=backend-*' \
+            --query 'Reservations[*].Instances[*].PublicIpAddress' \
+            --region us-west-1 \
+            --output text >> inventory.txt
+            exit 1
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/.circleci/ansible/inventory.txt
+      # Here's where you will add some code to rollback on failure
 #
 #   configure-infrastructure:
 #     docker:

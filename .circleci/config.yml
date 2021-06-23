@@ -133,7 +133,7 @@ jobs:
             cd frontend
             npm update
             npm install -g npm
-            npm audit fix # --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   scan-backend:
     docker:
@@ -154,7 +154,7 @@ jobs:
             cd backend
             npm update
             npm install -g npm
-            npm audit fix # --audit-level=critical
+            npm audit fix --audit-level=critical --force
 
   # Infrastructure Phase
   deploy-infrastructure:

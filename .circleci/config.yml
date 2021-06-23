@@ -153,7 +153,6 @@ jobs:
           command: |
             cd backend
             npm update
-            npm install -g npm
             npm audit fix --audit-level=critical --force
 
   # Infrastructure Phase

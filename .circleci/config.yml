@@ -47,6 +47,7 @@ jobs:
             # Your code here
             # exit 1
             cd frontend
+            rm -rf node_modules/
             npm install
             npm run build
       - save_cache:
@@ -71,6 +72,7 @@ jobs:
              # Your code here
              # exit 1
              cd backend
+             rm -rf node_modules/
              npm install
              npm run build
       - save_cache:

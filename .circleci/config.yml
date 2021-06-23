@@ -132,6 +132,7 @@ jobs:
           command: |
             cd frontend
             npm update
+            npm install -g npm
             npm audit fix --audit-level=critical
 
   scan-backend:
@@ -151,6 +152,7 @@ jobs:
           command: |
             cd backend
             npm update
+            npm install -g npm
             npm audit fix --audit-level=critical
 
   # Infrastructure Phase

@@ -133,7 +133,7 @@ jobs:
             cd frontend
             npm update
             npm install -g npm
-            npm audit fix --audit-level=critical
+            npm audit fix # --audit-level=critical
 
   scan-backend:
     docker:
@@ -149,11 +149,12 @@ jobs:
       # Your job code here
       - run:
           name: Run audit - backend
+          # npm install -g npm is to fix audit package error
           command: |
             cd backend
             npm update
             npm install -g npm
-            npm audit fix --audit-level=critical
+            npm audit fix # --audit-level=critical
 
   # Infrastructure Phase
   deploy-infrastructure:

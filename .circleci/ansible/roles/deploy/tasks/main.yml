@@ -2,7 +2,7 @@
 - name: Upgrade npm
   become: true
   shell: |
-    npm install npm@latest
+    npm install -g npm@latest
 
 - name: Copy compiled files
   unarchive:

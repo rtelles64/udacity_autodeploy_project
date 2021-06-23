@@ -1,1 +1,2 @@
 https://github.com/rtelles64/udacity_autodeploy_project
+https://s3.console.aws.amazon.com/s3/buckets/udapeople-qyznd553hoiiu818?region=us-west-1

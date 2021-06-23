@@ -7,7 +7,7 @@
 - name: Copy compiled files
   unarchive:
       src: /root/project/backend.tar.gz
-      dest: /home/ubuntu
+      dest: /home/ubuntu/
 
 - name: Executing node
   shell: |

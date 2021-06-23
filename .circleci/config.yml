@@ -155,6 +155,7 @@ jobs:
             npm update
             npm audit fix --audit-level=critical --force
 
+  # Infrastructure Phase
   deploy-infrastructure:
     docker:
       # Docker image here that supports AWS CLI
@@ -248,61 +249,94 @@ jobs:
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i ./inventory.txt configure-server.yml
       # Here's where you will add some code to rollback on failure
-#
-#   run-migrations:
-#     docker:
-#       # Docker image here that supports NodeJS
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Run migrations
-#           command: |
-#             # Your code here
-#             exit 1
-#       - run:
-#           name: Send migration results to memstash
-#           command: |
-#             # Your code here
-#             exit 1
-#      # Here's where you will add some code to rollback on failure
-#
-#   deploy-frontend:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Get backend url
-#           command: |
-#             # your code here
-#             export API_URL="http://${BACKEND_IP}:3030"
-#             echo "${API_URL}"
-#       - run:
-#           name: Deploy frontend objects
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure
-#
-#   deploy-backend:
-#     docker:
-#       # Docker image here that supports Ansible
-#     steps:
-#       # Checkout code from git
-#       # Add ssh keys with fingerprint
-#       # attach workspace
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Deploy backend
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure
+
+  run-migrations:
+    docker:
+      # Docker image here that supports NodeJS
+      - image: circleci/node:13.8.0
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Run migrations
+          command: |
+            # Your code here
+            cd backend
+            npm run migrations >> migration.log
+      - run:
+          name: Send migration results to memstash
+          command: |
+            # Your code here
+            cd backend
+            if grep "has been executed successfully" migration.log
+            then
+              curl -H "Content-Type: text/plain" \
+                -H "token: ${CIRCLE_WORKFLOW_ID}" \
+                --request PUT \
+                --data "1" https://api.memstash.io/values/migration_${CIRCLE_WORKFLOW_ID}
+            else
+              npm run migrations:revert
+            fi
+     # Here's where you will add some code to rollback on failure
+
+  deploy-frontend:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            yum -y install tar gzip
+            curl -o node-v13.14.0-linux-x64.tar.gz https://nodejs.org/dist/latest-v13.x/node-v13.14.0-linux-x64.tar.gz
+            tar --strip-components 1 -xzvf node-v* -C /usr/local
+      - run:
+          name: Get backend url
+          command: |
+            # your code here
+            export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
+            export API_URL="http://${BACKEND_IP}:3030"
+            echo "${API_URL}"
+      - run:
+          name: Deploy frontend objects
+          command: |
+            # your code here
+            cd frontend
+            npm run build
+            aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID} --recursive
+      # Here's where you will add some code to rollback on failure
+
+  deploy-backend:
+    docker:
+      # Docker image here that supports Ansible
+      - image: python:3.7-alpine3.11
+    steps:
+      # Checkout code from git
+      - checkout
+      # Add ssh keys with fingerprint
+      - add_ssh_keys:
+          fingerprints: ["1a:c3:53:27:fc:08:1d:b5:c8:92:e0:ac:be:33:64:80"]
+      # attach workspace
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            apk --no-cache add curl
+            apk add --update ansible
+            pip3 install awscli
+      - run:
+          name: Deploy backend
+          command: |
+            # your code here
+            tar czf backend.tar.gz backend/
+            cd .circleci/ansible/
+            ls
+            export ANSIBLE_HOST_KEY_CHECKING=False
+            ansible-playbook -i ./inventory.txt deploy-backend.yml
+      # Here's where you will add some code to rollback on failure
 #
 #   smoke-test:
 #     docker:

@@ -208,6 +208,7 @@ jobs:
             --query 'Reservations[*].Instances[*].PublicIpAddress' \
             --region us-west-1 \
             --output text >> inventory.txt
+            cat inventory.txt
 
       - persist_to_workspace:
           root: ~/
@@ -258,6 +259,8 @@ jobs:
     steps:
       # Checkout code from git
       - checkout
+      - attach_workspace:
+          at: ~/
       - run:
           name: Run migrations
           command: |

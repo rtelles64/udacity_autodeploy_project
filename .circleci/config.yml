@@ -263,8 +263,9 @@ jobs:
           command: |
             # Your code here
             cd backend
-            npm i
+            npm install
             npm run build
+            npm install typescript
             npm run migrations >> migration.log
       - run:
           name: Send migration results to memstash

@@ -326,3 +326,7 @@ Setting up servers and infrastructure involves many moving parts and points of f
 In this phase, we add Circle CI jobs that execute Cloud Formation templates that create infrastructure as well as jobs that execute Ansible Playbooks to configure that newly created infrastructure.
 
 ### 2. Deploy Phase
+
+With infrastructure up and running, we can configure dependencies and move applications over. *UdaPeople* used to have an ops guy to make copies every Friday, but now they want to make a full deploy on every single commit. Luckily for UdaPeople, you can add a job that handles this automatically with Ansible.
+
+### 3. Smoke Test Phase

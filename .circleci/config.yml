@@ -266,6 +266,7 @@ jobs:
           command: |
             # Your code here
             cd backend
+            echo $TYPEORM_PORT
             rm -rf node_modules/
             npm i
             npm install typescript

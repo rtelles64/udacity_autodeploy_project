@@ -375,16 +375,16 @@ jobs:
             apk add --no-cache python3 py3-pip \
               && pip3 install --upgrade pip \
               && pip3 install awscli
-      - run:
-          name: Get backend url
-          command: |
-            # your code here
-            export BACKEND_IP=$(curl -H "token: 776ef8d6-6840-4308-bb5c-1e48824cf347" --request GET https://api.memstash.io/values/udapeople_backend_url)
-            echo $BACKEND_IP
+      # - run:
+      #     name: Get backend url
+      #     command: |
+      #       # your code here
       - run:
           name: Backend smoke test.
           command: |
             # your code here
+            export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
+            echo $BACKEND_IP
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             curl -s --head ${API_URL}
       - run:

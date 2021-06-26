@@ -380,11 +380,12 @@ jobs:
           command: |
             # your code here
             export BACKEND_IP=$(curl -H "token: 776ef8d6-6840-4308-bb5c-1e48824cf347" --request GET https://api.memstash.io/values/udapeople_backend_url)
-            export API_URL="http://${BACKEND_IP}:3030/api/status"
+            echo $BACKEND_IP
       - run:
           name: Backend smoke test.
           command: |
             # your code here
+            export API_URL="http://${BACKEND_IP}:3030/api/status"
             curl -s --head ${API_URL}
       - run:
           name: Frontend smoke test.

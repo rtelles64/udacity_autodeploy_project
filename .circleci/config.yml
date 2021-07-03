@@ -281,12 +281,13 @@ jobs:
             npm i
             npm install typescript
             npm run build
-            npm run migrations >> migration.log
+            npm run migrations > migration.log
       - run:
           name: Send migration results to memstash
           command: |
             # Your code here
             cd backend
+            cat migration.log
             if grep "has been executed successfully" migration.log
             then
               curl -H "Content-Type: text/plain" \
@@ -343,6 +344,7 @@ jobs:
           name: Install dependencies
           command: |
             # your code here
+            pip3 install --upgrade pip
             apk --no-cache add curl
             apk add --update ansible
             pip3 install awscli
@@ -391,7 +393,6 @@ jobs:
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             curl ${API_URL}
-            curl -s --head ${API_URL}
       - run:
           name: Frontend smoke test.
           command: |

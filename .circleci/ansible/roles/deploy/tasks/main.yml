@@ -12,4 +12,4 @@
 - name: Executing node
   shell: |
     cd backend/dist
-    pm2 start main.js --name backend
+    pm2 start main.js --name backend -- start

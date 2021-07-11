@@ -50,6 +50,11 @@ jobs:
             rm -rf node_modules/
             npm install
             npm run build
+      - persist_to_workspace:
+          root: ~/
+          paths:
+              - frontend/node_modules
+              - frontend/dist
       - save_cache:
           paths:
               - frontend/node_modules
@@ -75,6 +80,11 @@ jobs:
              rm -rf node_modules/
              npm install
              npm run build
+      - persist_to_workspace:
+          root: ~/
+          paths:
+              - backend/node_modules
+              - backend/dist
       - save_cache:
           paths:
               - backend/node_modules
@@ -92,6 +102,8 @@ jobs:
       - restore_cache:
           keys:
               - frontend-build-${CIRCLE_WORKFLOW_ID}
+      - attach_workspace:
+          at: ~/
       # Your job code here
       - run:
           name: Test front end
@@ -110,6 +122,8 @@ jobs:
       - restore_cache:
           keys:
               - backend-build-${CIRCLE_WORKFLOW_ID}
+      - attach_workspace:
+          at: ~/
       # Your job code here
       - run:
           name: Test back end
@@ -128,6 +142,8 @@ jobs:
       - restore_cache:
           keys:
               - frontend-build-${CIRCLE_WORKFLOW_ID}
+      - attach_workspace:
+          at: ~/
       # Your job code here
       - run:
           name: Run audit - frontend
@@ -147,6 +163,8 @@ jobs:
       - restore_cache:
           keys:
               - backend-build-${CIRCLE_WORKFLOW_ID}
+      - attach_workspace:
+          at: ~/
       # Your job code here
       - run:
           name: Run audit - backend
@@ -227,8 +245,8 @@ jobs:
       - add_ssh_keys:
           fingerprints: ["1a:c3:53:27:fc:08:1d:b5:c8:92:e0:ac:be:33:64:80"]
       # attach workspace
-      # - attach_workspace:
-      #     at: ~/
+      - attach_workspace:
+          at: ~/
       - run:
           name: Install dependencies
           command: |
@@ -313,6 +331,8 @@ jobs:
             yum -y install tar gzip
             curl -o node-v13.14.0-linux-x64.tar.gz https://nodejs.org/dist/latest-v13.x/node-v13.14.0-linux-x64.tar.gz
             tar --strip-components 1 -xzvf node-v* -C /usr/local
+      - attach_workspace:
+          at: ~/
       - run:
           name: Get backend url
           command: |

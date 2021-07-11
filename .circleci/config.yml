@@ -405,18 +405,6 @@ jobs:
       #     command: |
       #       # your code here
       - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            export URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
-            echo "${URL}"
-            if curl ${URL} | grep "Welcome"
-            then
-              return 0
-            else
-              return 1
-            fi
-      - run:
           name: Backend smoke test.
           command: |
             # your code here
@@ -428,6 +416,18 @@ jobs:
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             curl ${API_URL}
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            export URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
+            echo "${URL}"
+            if curl ${URL} | grep "Welcome"
+            then
+              return 0
+            else
+              return 1
+            fi
       # Here's where you will add some code to rollback on failure
 #
 #   cloudfront-update:

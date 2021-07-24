@@ -332,3 +332,5 @@ With infrastructure up and running, we can configure dependencies and move appli
 ### 3. Smoke Test Phase
 
 What if the UdaPeople website is down due to a runtime bug that our unit tests didn't catch? The first thing we do after deploying is run a smoke test to make sure we have access to all our created resources.
+
+### 4. Rollback Phase

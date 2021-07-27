@@ -284,23 +284,13 @@ jobs:
           command: |
             # Your code here
             cd backend
-            echo "Populating env file..."
-            echo "NODE_ENV=${ENVIRONMENT}" > .env
-            echo "TYPEORM_CONNECTION=${TYPEORM_CONNECTION}" >> .env
-            echo "TYPEORM_MIGRATIONS_DIR=${TYPEORM_MIGRATIONS_DIR}" >> .env
-            echo "TYPEORM_ENTITIES=${TYPEORM_ENTITIES}" >> .env
-            echo "TYPEORM_MIGRATIONS=${TYPEORM_MIGRATIONS}" >> .env
-            echo "TYPEORM_HOST=${TYPEORM_HOST}" >> .env
-            echo "TYPEORM_PORT=${TYPEORM_PORT}" >> .env
-            echo "TYPEORM_USERNAME=${TYPEORM_USERNAME}" >> .env
-            echo "TYPEORM_PASSWORD=${TYPEORM_PASSWORD}" >> .env
-            echo "TYPEORM_DATABASE=${TYPEORM_DATABASE}" >> .env
+            echo "Printing env vars..."
             cat .env
-            rm -rf node_modules/
-            npm i
-            npm install typescript
-            npm run build
-            npm run migrations > migration.log
+            # rm -rf node_modules/
+            # npm i
+            # npm install typescript
+            # npm run build
+            npm run migrations >> migration.log
       - run:
           name: Send migration results to memstash
           command: |
@@ -410,7 +400,7 @@ jobs:
           command: |
             # your code here
             # export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
-            BACKEND_IP=$(aws ec2 describe-instances \
+            export BACKEND_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)

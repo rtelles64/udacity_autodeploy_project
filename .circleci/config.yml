@@ -298,9 +298,9 @@ jobs:
             cat .env
             rm -rf node_modules/
             npm i
-            npm audit fix --audit-level=critical --force
             npm install typescript
             npm run build
+            npm audit fix --audit-level=critical --force
             npm run migrations > migration.log
       - run:
           name: Send migration results to memstash

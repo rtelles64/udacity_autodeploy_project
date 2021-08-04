@@ -11,7 +11,9 @@
 
 - name: Executing node
   shell: |
-    cd backend
-    npm install
-    npm run build
-    npm run start
+    # cd backend
+    # npm install
+    # npm run build
+    # npm run start
+    cd backend/dist
+    pm2 start main.js

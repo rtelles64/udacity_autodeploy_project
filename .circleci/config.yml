@@ -300,7 +300,6 @@ jobs:
             npm i
             npm install typescript
             npm run build
-            npm audit fix --audit-level=critical --force
             npm run migrations > migration.log
       - run:
           name: Send migration results to memstash

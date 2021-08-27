@@ -406,18 +406,6 @@ jobs:
       #     command: |
       #       # your code here
       - run:
-          name: Backend smoke test.
-          command: |
-            # your code here
-            # export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
-            export BACKEND_IP=$(aws ec2 describe-instances \
-              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID}" \
-              --query 'Reservations[*].Instances[*].PublicIpAddress' \
-              --output text)
-            echo "${BACKEND_IP}"
-            export API_URL="http://${BACKEND_IP}:3030/api/status"
-            curl ${API_URL}
-      - run:
           name: Frontend smoke test.
           command: |
             # your code here
@@ -429,6 +417,19 @@ jobs:
             else
               return 1
             fi
+      - run:
+          name: Backend smoke test.
+          command: |
+            # your code here
+            # export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
+            export BACKEND_IP=$(aws ec2 describe-instances \
+              --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID}" \
+              --query 'Reservations[*].Instances[*].PublicIpAddress' \
+              --output text)
+            echo "${BACKEND_IP}"
+            export API_URL="http://${BACKEND_IP}:3030/api/status"
+            curl ${API_URL}
+
       # Here's where you will add some code to rollback on failure
 #
 #   cloudfront-update:

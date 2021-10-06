@@ -334,3 +334,18 @@ With infrastructure up and running, we can configure dependencies and move appli
 What if the UdaPeople website is down due to a runtime bug that our unit tests didn't catch? The first thing we do after deploying is run a smoke test to make sure we have access to all our created resources.
 
 ### 4. Rollback Phase
+
+Any experienced developer knows that not every pipeline follows the "happy path." If the smoke test fails, what should we do?
+
+The `destroy-environment` command removes infrastructure if something goes wrong:
+
+    - Trigger rollbacks if the smoke tests or any following jobs fail
+    - Delete files uploaded to S3
+    - Destroy the current CloudFormation stacks
+
+The `revert-migrations` command rolls back any migrations that were successfully applied during this CI/CD workflow:
+
+    - Trigger rollbacks if the smoke tests or any following jobs fail
+    - Revert the last migration (IF a new migration was applied) on the database so that it goes back to the way it was before
+
+No more jobs should run after these commands have executed.

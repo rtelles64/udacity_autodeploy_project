@@ -349,3 +349,5 @@ The `revert-migrations` command rolls back any migrations that were successfully
     - Revert the last migration (IF a new migration was applied) on the database so that it goes back to the way it was before
 
 No more jobs should run after these commands have executed.
+
+### 5. Promotion Phase

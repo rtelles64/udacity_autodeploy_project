@@ -350,7 +350,7 @@ The `revert-migrations` command rolls back any migrations that were successfully
 
 No more jobs should run after these commands have executed.
 
-### 5. Promotion Phase
+
 
 ## Troubleshooting
 

@@ -349,3 +349,30 @@ The `revert-migrations` command rolls back any migrations that were successfully
     - Revert the last migration (IF a new migration was applied) on the database so that it goes back to the way it was before
 
 No more jobs should run after these commands have executed.
+
+### 5. Promotion Phase
+
+## Troubleshooting
+
+### Run Migrations
+
+If the project is left alone for a long time and a CircleCI rebuild happens, the `run-migrations` step sometimes fails. If this happens, do the following:
+
+  1. Reset the default password in the RDS database
+
+    - Click the database name you wish to modify
+    - Click the "Modify" button
+    - Enter a new password (or re-enter the old one) in the "New master password" field
+    - Check the box to propagate this change immediately
+
+  2. Reset (delete and re-enter) the [Project Environment Variables](https://app.circleci.com/settings/project/github/rtelles64/udacity_autodeploy_project/environment-variables?return-to=https%3A%2F%2Fapp.circleci.com%2Fpipelines%2Fgithub%2Frtelles64%2Fudacity_autodeploy_project%3Fbranch%3Dmain) in CircleCI
+
+Once the steps above have been completed, initiate a new CircleCI rebuild.
+
+### Deploy Backend
+
+**Timeout**
+
+Occasionally, the `deploy-backend` step fails. This is typically because of server lags on Amazon's side. CircleCI issues a timeout if a job takes too long to complete.
+
+Simply initiate a new CircleCI rebuild.

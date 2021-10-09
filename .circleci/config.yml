@@ -297,6 +297,12 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
+          name: Install dependencies
+          command: |
+            sudo apt-get -y -qq update
+            sudo apt-get -y -qq install python3
+            sudo apt-get -qq install awscli
+      - run:
           name: Run migrations
           command: |
             # Your code here

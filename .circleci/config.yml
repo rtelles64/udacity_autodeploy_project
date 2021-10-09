@@ -441,18 +441,6 @@ jobs:
       #     command: |
       #       # your code here
       - run:
-          name: Frontend smoke test.
-          command: |
-            # your code here
-            export URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
-            echo "${URL}"
-            if curl ${URL} | grep "Welcome"
-            then
-              return 0
-            else
-              return 1
-            fi
-      - run:
           name: Backend smoke test.
           command: |
             # your code here
@@ -464,27 +452,55 @@ jobs:
             echo "${BACKEND_IP}"
             export API_URL="http://${BACKEND_IP}:3030/api/status"
             curl ${API_URL}
+            
+      - run:
+          name: Frontend smoke test.
+          command: |
+            # your code here
+            export URL="http://udapeople-${CIRCLE_WORKFLOW_ID}.s3-website-us-west-2.amazonaws.com"
+            echo "${URL}"
+            if curl ${URL} | grep "Welcome"
+            then
+              return 0
+            else
+              return 1
+            fi
 
       # Here's where you will add some code to rollback on failure
       - destroy-environment:
           id: ${CIRCLE_WORKFLOW_ID}
       - revert-migrations:
           id: ${CIRCLE_WORKFLOW_ID}
-#
-#   cloudfront-update:
-#     docker:
-#       # Docker image here that supports AWS CLI
-#     steps:
-#       # Checkout code from git
-#       - run:
-#           name: Install dependencies
-#           command: |
-#             # your code here
-#       - run:
-#           name: Update cloudfront distribution
-#           command: |
-#             # your code here
-#       # Here's where you will add some code to rollback on failure
+
+  cloudfront-update:
+    docker:
+      # Docker image here that supports AWS CLI
+      - image: amazon/aws-cli
+    steps:
+      # Checkout code from git
+      - checkout
+      - run:
+          name: Install dependencies
+          command: |
+            # your code here
+            yum -y install tar gzip
+            # Install nodejs
+            curl -sL https://rpm.nodesource.com/setup_lts.x | bash -
+            yum -y install nodejs
+      - run:
+          name: Update cloudfront distribution
+          command: |
+            # your code here
+            aws cloudformation deploy \
+              --template-file .circleci/files/cloudfront.yml \
+              --stack-name=udapeople-cloudfront \
+              --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" \
+              --tags project=udapeople
+      # Here's where you will add some code to rollback on failure
+      - destroy-environment:
+          id: ${CIRCLE_WORKFLOW_ID}
+      - revert-migrations:
+          id: ${CIRCLE_WORKFLOW_ID}
 #
 # cleanup:
 #     docker:
@@ -534,7 +550,7 @@ workflows:
           requires: [run-migrations]
       - smoke-test:
           requires: [deploy-backend, deploy-frontend]
-      # - cloudfront-update:
-      #     requires: [smoke-test]
+      - cloudfront-update:
+          requires: [smoke-test]
       # - cleanup:
       #     requires: [cloudfront-update]

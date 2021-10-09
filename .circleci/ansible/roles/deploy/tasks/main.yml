@@ -14,4 +14,6 @@
     cd backend
     npm install
     npm run build
-    npm run start
+    # npm run start
+    cd dist
+    pm2 start main.js

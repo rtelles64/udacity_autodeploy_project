@@ -445,12 +445,12 @@ jobs:
           command: |
             # your code here
             # export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
-            export BACKEND_IP=$(aws ec2 describe-instances \
+            BACKEND_IP=$(aws ec2 describe-instances \
               --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID}" \
               --query 'Reservations[*].Instances[*].PublicIpAddress' \
               --output text)
-            echo "${BACKEND_IP}"
-            export API_URL="http://${BACKEND_IP}:3030/api/status"
+            # echo "${BACKEND_IP}"
+            API_URL="https://${BACKEND_IP}:3030/api/status"
             curl ${API_URL}
 
       - run:

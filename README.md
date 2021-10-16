@@ -354,6 +354,10 @@ No more jobs should run after these commands have executed.
 
 Assuming smoke tests came back clean, we should have a relatively high level of confidence that our deployment was a 99% success. Now it's time for the last 1%. *UdaPeople* uses the "Blue-Green Deployment Strategy" which means we deployed a second environment or stack next to our existing production stack. Now that we're sure everything is "A-okay", we can switch from blue to green.
 
+### 6. Cleanup Phase
+
+The *UdaPeople* finance department likes it when AWS bills are more or less the same as last month OR trending downward. But, what if this "Blue-Green" strategy is leaving behind a trail of dead-end production environments? We avoid this upward cost trend by adding a cleanup job for the old stacks.
+
 ## Troubleshooting
 
 ### Run Migrations

@@ -358,6 +358,8 @@ Assuming smoke tests came back clean, we should have a relatively high level of 
 
 The *UdaPeople* finance department likes it when AWS bills are more or less the same as last month OR trending downward. But, what if this "Blue-Green" strategy is leaving behind a trail of dead-end production environments? We avoid this upward cost trend by adding a cleanup job for the old stacks.
 
+### Other considerations
+
 ## Troubleshooting
 
 ### Run Migrations

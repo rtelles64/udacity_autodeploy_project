@@ -26,3 +26,4 @@
   roles:
     # Your code here
     - configure-server-dependencies
+    - configure-prometheus-node-exporter

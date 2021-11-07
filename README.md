@@ -358,7 +358,15 @@ Assuming smoke tests came back clean, we should have a relatively high level of 
 
 The *UdaPeople* finance department likes it when AWS bills are more or less the same as last month OR trending downward. But, what if this "Blue-Green" strategy is leaving behind a trail of dead-end production environments? We avoid this upward cost trend by adding a cleanup job for the old stacks.
 
-### Other considerations
+## Turn Errors into Sirens
+
+Errors and unhealthy states are important to know about. Too often, server errors are silenced by hasty reboots or just never having an outlet in the first place.
+
+### Setup
+
+- Manually create an EC2 instance and SSH into it
+- Set up Prometheus Server on EC2 following [these instructions](https://codewizardly.com/prometheus-on-aws-ec2-part1/)
+- Configure Prometheus for AWS Service Discovery following [these instructions](https://codewizardly.com/prometheus-on-aws-ec2-part3/)
 
 ## Troubleshooting
 
@@ -384,3 +392,19 @@ Once the steps above have been completed, initiate a new CircleCI rebuild.
 Occasionally, the `deploy-backend` step fails. This is typically because of server lags on Amazon's side. CircleCI issues a timeout if a job takes too long to complete.
 
 Simply initiate a new CircleCI rebuild.
+
+### Cleanup
+
+**DELETE RESOURCES**
+
+Remember to delete resources to avoid accruing charges!!! Especially if you're not going to work for long periods of time on the project.
+
+Remember to re-create resources as well!
+
+- RDS &mdash; Delete RDS instances to avoid billing (stopping it will still charge for storage)
+
+> **NOTE**:
+>
+> When re-launching an RDS instance, remember to change the [Circle CI Env Variables](https://app.circleci.com/settings/project/github/rtelles64/udacity_autodeploy_project/environment-variables?return-to=https%3A%2F%2Fapp.circleci.com%2Fpipelines%2Fgithub%2Frtelles64%2Fudacity_autodeploy_project%3Fbranch%3Dmain) and the backend/.env file accordingly.
+
+- EC2 &mdash; You can just stop an instance to avoid being charged (restart it when you plan to use it again)

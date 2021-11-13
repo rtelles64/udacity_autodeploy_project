@@ -7,6 +7,7 @@ After=network-online.target
 User=root
 Type=simple
 ExecStart=/usr/local/bin/node_exporter
+  --web.listen-address:9100
 
 [Install]
 WantedBy=multi-user.target

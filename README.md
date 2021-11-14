@@ -368,6 +368,8 @@ Errors and unhealthy states are important to know about. Too often, server error
 - Set up Prometheus Server on EC2 following [these instructions](https://codewizardly.com/prometheus-on-aws-ec2-part1/)
 - Configure Prometheus for AWS Service Discovery following [these instructions](https://codewizardly.com/prometheus-on-aws-ec2-part3/)
 
+### Backend Monitoring
+
 ## Troubleshooting
 
 ### Run Migrations

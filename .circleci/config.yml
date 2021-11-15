@@ -142,6 +142,7 @@ jobs:
           name: Test back end
           command: |
             cd backend
+            npm install
             npm run test
   # Accidentally jumped ahead and missed error :/
   scan-frontend:

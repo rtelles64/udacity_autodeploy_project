@@ -188,7 +188,7 @@ jobs:
             # Going to cause this to fail intentionally by removing "fix"
             # npm audit --audit-level=critical
             # Add "fix" to fix the issue
-            npm audit fix --audit-level=critical --force
+            npm audit fix --audit-level=critical
 
   # Infrastructure Phase
   deploy-infrastructure:

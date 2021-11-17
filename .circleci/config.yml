@@ -378,6 +378,7 @@ jobs:
           command: |
             # your code here
             cd frontend
+            npm install
             npm run build
             aws s3 cp dist s3://udapeople-${CIRCLE_WORKFLOW_ID} --recursive
       # Here's where you will add some code to rollback on failure
@@ -415,7 +416,7 @@ jobs:
             cd .circleci/ansible/
             ls
             cat ./inventory.txt
-            BACKEND_IP=`cat .circleci/ansible/inventory.txt | head -2 | tail -1`
+            BACKEND_IP=`cat ./inventory.txt | head -2 | tail -1`
             echo "BACKEND_IP: ${BACKEND_IP}"
             export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i ./inventory.txt deploy-backend.yml

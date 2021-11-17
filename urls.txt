@@ -1,2 +1,2 @@
 https://github.com/rtelles64/udacity_autodeploy_project
-http://udapeople-328a33a5-126e-472c-914a-f0a5a2555727.s3-website-us-west-1.amazonaws.com
+http://udapeople-026ee7bf-923b-4d4c-837c-313ca838b149.s3-website-us-west-1.amazonaws.com

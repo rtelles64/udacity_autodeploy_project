@@ -503,8 +503,14 @@ jobs:
           name: Update cloudfront distribution
           command: |
             # your code here
-            aws cloudformation deploy \
-              --template-file .circleci/files/cloudfront.yml \
+            # aws cloudformation deploy \
+            #   --template-file .circleci/files/cloudfront.yml \
+            #   --stack-name=udapeople-cloudfront \
+            #   --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" \
+            #   --tags project=udapeople
+            # Gonna try to use aws cloudformation update-stack
+            aws cloudformation update-stack \
+              --use-previous-template \
               --stack-name=udapeople-cloudfront \
               --parameter-overrides WorkflowID="${CIRCLE_WORKFLOW_ID}" \
               --tags project=udapeople

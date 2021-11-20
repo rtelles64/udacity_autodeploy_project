@@ -457,10 +457,10 @@ jobs:
             #   --filters "Name=tag:Name, Values=backend-${CIRCLE_WORKFLOW_ID}" \
             #   --query 'Reservations[*].Instances[*].PublicIpAddress' \
             #   --output text)
-            BACKEND_IP=`cat .circleci/ansible/inventory.txt | head -2 | tail -1`
+            export BACKEND_IP=`cat .circleci/ansible/inventory.txt | head -2 | tail -1`
             echo "${BACKEND_IP}"
-            API_URL="http://${BACKEND_IP}:3030/api/status"
-            curl ${API_URL}
+            export API_URL="http://${BACKEND_IP}:3030/api/status"
+            curl -s --head ${API_URL}
 
       - run:
           name: Frontend smoke test.

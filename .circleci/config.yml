@@ -412,6 +412,21 @@ jobs:
             apk --no-cache add curl
             apk add --update ansible
             pip3 install awscli
+      - attach_workspace:
+          at: ~/
+      - run:
+          name: Set env
+          command: |
+            echo ENVIROMENT=$ENVIROMENT > "backend/.env"
+            echo TYPEORM_CONNECTION=$TYPEORM_CONNECTION >> "backend/.env"
+            echo TYPEORM_MIGRATIONS_DIR=$TYPEORM_MIGRATIONS_DIR >> "backend/.env"
+            echo TYPEORM_ENTITIES=$TYPEORM_ENTITIES >> "backend/.env"
+            echo TYPEORM_MIGRATIONS=$TYPEORM_MIGRATIONS >> "backend/.env"
+            echo TYPEORM_HOST=$TYPEORM_HOST >> "backend/.env"
+            echo TYPEORM_PORT=$TYPEORM_PORT >> "backend/.env"
+            echo TYPEORM_USERNAME=$TYPEORM_USERNAME >> "backend/.env"
+            echo TYPEORM_PASSWORD=$TYPEORM_PASSWORD >> "backend/.env"
+            echo TYPEORM_DATABASE=$TYPEORM_DATABASE >> "backend/.env"
       - run:
           name: Deploy backend
           command: |
@@ -422,7 +437,7 @@ jobs:
             cat ./inventory.txt
             BACKEND_IP=`cat ./inventory.txt | head -2 | tail -1`
             echo "BACKEND_IP: ${BACKEND_IP}"
-            export ANSIBLE_HOST_KEY_CHECKING=False
+            -- export ANSIBLE_HOST_KEY_CHECKING=False
             ansible-playbook -i ./inventory.txt deploy-backend.yml
       # Here's where you will add some code to rollback on failure
       - destroy-environment:

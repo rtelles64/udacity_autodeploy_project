@@ -369,7 +369,7 @@ jobs:
       - attach_workspace:
           at: ~/
       - run:
-          name: Get backend url
+          name: Get backend url and deploy frontend objects
           command: |
             # your code here
             # export BACKEND_IP=$(curl -H "token: ${CIRCLE_WORKFLOW_ID}" --request GET https://api.memstash.io/values/udapeople_backend_url)
@@ -377,10 +377,6 @@ jobs:
             export API_URL="http://${BACKEND_IP}:3030"
             echo "${API_URL}"
             echo "${API_URL}" >> "frontend/.env"
-      - run:
-          name: Deploy frontend objects
-          command: |
-            # your code here
             cd frontend
             npm install
             npm run build
